@@ -12,8 +12,13 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const { signIn } = useAuth();
+  const { signIn, user, session } = useAuth();
   const navigate = useNavigate();
+
+  if (session && user) {
+    const redirectMap: Record<string, string> = { admin: '/admin', faculty: '/faculty', student: '/student' };
+    return <Navigate to={redirectMap[user.role] || '/'} replace />;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
