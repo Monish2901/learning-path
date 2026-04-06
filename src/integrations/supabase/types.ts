@@ -14,13 +14,155 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      questions: {
+        Row: {
+          correct_answer: string | null
+          created_at: string
+          id: string
+          options: Json | null
+          question_text: string
+          test_id: string
+          type: string
+        }
+        Insert: {
+          correct_answer?: string | null
+          created_at?: string
+          id?: string
+          options?: Json | null
+          question_text: string
+          test_id: string
+          type: string
+        }
+        Update: {
+          correct_answer?: string | null
+          created_at?: string
+          id?: string
+          options?: Json | null
+          question_text?: string
+          test_id?: string
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "questions_test_id_fkey"
+            columns: ["test_id"]
+            isOneToOne: false
+            referencedRelation: "tests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      submissions: {
+        Row: {
+          answers: Json
+          id: string
+          score: number | null
+          student_id: string
+          submitted_at: string
+          test_id: string
+        }
+        Insert: {
+          answers?: Json
+          id?: string
+          score?: number | null
+          student_id: string
+          submitted_at?: string
+          test_id: string
+        }
+        Update: {
+          answers?: Json
+          id?: string
+          score?: number | null
+          student_id?: string
+          submitted_at?: string
+          test_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "submissions_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "submissions_test_id_fkey"
+            columns: ["test_id"]
+            isOneToOne: false
+            referencedRelation: "tests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tests: {
+        Row: {
+          assigned_to: string[] | null
+          created_at: string
+          created_by: string
+          duration_minutes: number | null
+          id: string
+          title: string
+        }
+        Insert: {
+          assigned_to?: string[] | null
+          created_at?: string
+          created_by: string
+          duration_minutes?: number | null
+          id?: string
+          title: string
+        }
+        Update: {
+          assigned_to?: string[] | null
+          created_at?: string
+          created_by?: string
+          duration_minutes?: number | null
+          id?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tests_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      users: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          name: string
+          role: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id: string
+          name: string
+          role: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          role?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      create_user_profile: {
+        Args: { _email: string; _name: string; _role: string; _user_id: string }
+        Returns: undefined
+      }
+      get_user_role: { Args: { _user_id: string }; Returns: string }
     }
     Enums: {
       [_ in never]: never
